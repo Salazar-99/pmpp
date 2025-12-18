@@ -1,2 +1,2 @@
-# My personal notes and code from Programming Massively Parallel Processors
+# Notes on Programming Massively Parallel Processors
 
