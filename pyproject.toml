@@ -1,0 +1,3 @@
+[tool.uv.workspace]
+members = ["timing", "06-matmul", "07-convolution"]
+

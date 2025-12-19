@@ -1,0 +1,23 @@
+[project]
+name = "convolution"
+version = "0.1.0"
+description = "Convolution CUDA kernels"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "torch>=2.9.1",
+    "timing",
+]
+
+[project.scripts]
+convolution = "convolution_main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[tool.uv.sources]
+timing = { workspace = true }

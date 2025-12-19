@@ -1,0 +1,13 @@
+[project]
+name = "timing"
+version = "0.1.0"
+description = "CUDA timing utilities"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "torch>=2.9.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

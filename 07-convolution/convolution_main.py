@@ -1,28 +1,24 @@
+from pathlib import Path
+
 import torch
 from torch.utils.cpp_extension import load
+
+# Get the directory containing this file for absolute paths to sources
+_THIS_DIR = Path(__file__).parent.resolve()
 
 # Load the extension
 # This compiles the C++/CUDA code JIT
 cuda_ext = load(
     name="convolution",
-    sources=["convolution.cpp", "convolution.cu"],
+    sources=[str(_THIS_DIR / "convolution.cpp"), str(_THIS_DIR / "convolution.cu")],
     verbose=True,
 )
 
 
 def main():
     # Use small sizes for testing
-    batch_size = 1
-    in_channels = 3
-    out_channels = 16
     input_height = 32
     input_width = 32
-    kernel_height = 3
-    kernel_width = 3
-    padding_h = 1
-    padding_w = 1
-    stride_h = 1
-    stride_w = 1
 
     # Ensure CUDA is available
     if not torch.cuda.is_available():
@@ -31,37 +27,29 @@ def main():
 
     # Create input tensor (batch, channels, height, width)
     input_tensor = torch.randn(
-        batch_size,
-        in_channels,
         input_height,
         input_width,
         device="cuda",
         dtype=torch.float32,
     )
 
-    # Create weight tensor (out_channels, in_channels, kernel_height, kernel_width)
-    weight_tensor = torch.randn(
-        out_channels,
-        in_channels,
-        kernel_height,
-        kernel_width,
+    # Create filter tensor (out_channels, in_channels, kernel_height, kernel_width)
+    filter_tensor = torch.randn(
         device="cuda",
         dtype=torch.float32,
     )
 
     # Run custom convolution kernel
     print("Testing convolution_kernel...")
-    output = cuda_ext.convolution(
-        input_tensor, weight_tensor, padding_h, padding_w, stride_h, stride_w
-    )
+    output = cuda_ext.convolution(input_tensor, filter_tensor)
     print(f"Custom kernel result shape: {output.shape}")
 
     # Run PyTorch native convolution for comparison
     output_ref = torch.nn.functional.conv2d(
         input_tensor,
-        weight_tensor,
-        padding=(padding_h, padding_w),
-        stride=(stride_h, stride_w),
+        filter_tensor,
+        padding=0,
+        stride=1,
     )
     print(f"PyTorch result shape: {output_ref.shape}")
 

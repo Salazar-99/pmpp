@@ -1,11 +1,16 @@
+from pathlib import Path
+
 import torch
 from torch.utils.cpp_extension import load
+
+# Get the directory containing this file for absolute paths to sources
+_THIS_DIR = Path(__file__).parent.resolve()
 
 # Load the extension
 # This compiles the C++/CUDA code JIT
 cuda_ext = load(
     name="matmul",
-    sources=["matmul.cpp", "matmul.cu"],
+    sources=[str(_THIS_DIR / "matmul.cpp"), str(_THIS_DIR / "matmul.cu")],
     verbose=True,
 )
 
@@ -77,3 +82,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
