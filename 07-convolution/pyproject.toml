@@ -5,7 +5,7 @@ description = "Convolution CUDA kernels"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "torch>=2.9.1",
+    "pmpp",
     "timing",
 ]
 
@@ -20,4 +20,5 @@ build-backend = "hatchling.build"
 packages = ["."]
 
 [tool.uv.sources]
+pmpp = { workspace = true }
 timing = { workspace = true }
